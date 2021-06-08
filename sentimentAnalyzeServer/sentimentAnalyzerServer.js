@@ -10,23 +10,65 @@ app.use(cors_app());
 
 app.get("/",(req,res)=>{
     res.render('index.html');
-  });
+});
 
 app.get("/url/emotion", (req,res) => {
 
-    return res.send({"happy":"90","sad":"10"});
+const analyzeParams = {
+  'url':req.query.url,
+  'features': {
+    'emotion': {},
+  }
+};
+
+getNLUInstance().analyze(analyzeParams)
+.then(results => res.send(results.result.emotion.document.emotion))
+.catch(err => console.log(err));
+
 });
 
 app.get("/url/sentiment", (req,res) => {
-    return res.send("url sentiment for "+req.query.url);
+
+const analyzeParams = {
+  'url':req.query.url,
+  'features': {
+    'sentiment': {},
+  }
+};
+
+getNLUInstance().analyze(analyzeParams)
+.then(results => res.send(results.result.sentiment.document.label))
+.catch(err => console.log(err));
+
 });
 
 app.get("/text/emotion", (req,res) => {
-    return res.send({"happy":"10","sad":"90"});
+    
+const analyzeParams = {
+  'text':req.query.text,
+  'features': {
+    'emotion': {},
+  }
+};
+
+getNLUInstance().analyze(analyzeParams)
+.then(results => res.send(results.result.emotion.document.emotion))
+.catch(err => console.log(err));
 });
 
 app.get("/text/sentiment", (req,res) => {
-    return res.send("text sentiment for "+req.query.text);
+
+const analyzeParams = {
+  'text':req.query.text,
+  'features': {
+    'sentiment': {},
+  }
+};
+
+getNLUInstance().analyze(analyzeParams)
+.then(results => res.send(results.result.sentiment.document.label))
+.catch(err => console.log(err));
+
 });
 
 let server = app.listen(8080, () => {
@@ -49,4 +91,8 @@ function getNLUInstance() {
 });
    return naturalLanguageUnderstanding
 }
+
+ var nluparams = {
+
+ }
 
